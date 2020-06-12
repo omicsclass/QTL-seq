@@ -256,7 +256,7 @@ class Params(object):
     def qtlplot_options(self):
         parser = argparse.ArgumentParser(description='QTL-plot version {}'.format(__version__),
                                          formatter_class=argparse.RawTextHelpFormatter)
-        parser.usage = ('qtlplot -v <VCF> -n1 <INT> -n2 <INT> -o <OUT_DIR>\n'
+        parser.usage = ('qtlplot -v <VCF> -n1 <INT> -n2 <INT> -o <OUT_DIR> -p <ID> -b1 <ID> -b2 <ID>\n'
                         '               [-F <INT>] [-t <INT>] [-w <INT>] [-s <INT>] [-D <INT>]\n'
                         '               [-d <INT>] [-N <INT>] [-m <FLOAT>] [-S <INT>] [-e <DATABASE>]\n'
                         '               [--igv] [--indel]')
@@ -269,6 +269,28 @@ class Params(object):
                             type=str,
                             help=('VCF file which contains parent, bulk1, and bulk2\n'
                                   'in this order. This VCF file must have AD field.'),
+                            metavar='')
+        parser.add_argument('-r',
+                            '--ref',
+                            action='store',
+                            required=True,
+                            type=str,
+                            help=('Reference parent ID in vcf file\n'),
+                            metavar='')
+
+        parser.add_argument('-b1',
+                            '--bulk1ID',
+                            action='store',
+                            required=True,
+                            type=str,
+                            help=('bulk1 sample ID in vcf file\n'),
+                            metavar='')
+        parser.add_argument('-b2',
+                            '--bulk2ID',
+                            action='store',
+                            required=True,
+                            type=str,
+                            help=('bulk2 sample ID in vcf file\n'),
                             metavar='')
 
         parser.add_argument('-n1',

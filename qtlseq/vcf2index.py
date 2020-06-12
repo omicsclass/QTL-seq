@@ -21,6 +21,9 @@ class Vcf2Index(object):
     def __init__(self, args):
         self.out = args.out
         self.vcf = args.vcf
+        self.ref = args.ref
+        self.bulk1ID = args.bulk1ID
+        self.bulk2ID = args.bulk2ID
         self.snpEff = args.snpEff
         self.filial = args.filial
         self.species = args.species
@@ -129,6 +132,22 @@ class Vcf2Index(object):
         vcf.close()
         return GT_pos, AD_pos, ADF_pos, ADR_pos
 
+    def get_sample_field(self):
+        root, ext = os.path.splitext(self.vcf)
+        if ext == '.gz':
+            vcf = gzip.open(self.vcf, 'rt')
+        else:
+            vcf = open(self.vcf, 'r')
+        for line in vcf:
+            if re.match(r'^#C', line):
+                fields = line.split()
+                p_pos=fields.index(self.ref)
+                b1_pos=fields.index(self.bulk1ID)
+                b2_pos=fields.index(self.bulk2ID)
+                break
+        vcf.close()
+        return p_pos, b1_pos, b2_pos
+
     def get_variant_impact(self, annotation):
         ANN = self.ANN_re.findall(annotation)[0]
         genes = ANN.split(',')
@@ -224,11 +243,15 @@ class Vcf2Index(object):
             AD_pos = self.field_pos[1]
             ADF_pos = self.field_pos[2]
             ADR_pos = self.field_pos[3]
-
-            parent_GT = cols[9].split(':')[GT_pos]
-            parent_AD = cols[9].split(':')[AD_pos]
-            bulk1_AD = cols[10].split(':')[AD_pos]
-            bulk2_AD = cols[11].split(':')[AD_pos]
+            
+            ref_pos=self.sample_field_pos[0]
+            bulk1_pos=self.sample_field_pos[1]
+            bulk2_pos=self.sample_field_pos[2]
+            
+            parent_GT = cols[ref_pos].split(':')[GT_pos]
+            parent_AD = cols[ref_pos].split(':')[AD_pos]
+            bulk1_AD = cols[bulk1_pos].split(':')[AD_pos]
+            bulk2_AD = cols[bulk2_pos].split(':')[AD_pos]
 
             if ADF_pos != None and ADR_pos != None:
                 parent_ADF = cols[9].split(':')[ADF_pos]
@@ -340,6 +363,7 @@ class Vcf2Index(object):
     def run(self):
         print(time_stamp(), 'start to calculate SNP-index.', flush=True)
         self.field_pos = self.get_field()
+        self.sample_field_pos = self.get_sample_field()
         self.calculate_SNPindex()
         print(time_stamp(), 'SNP-index successfully finished.', flush=True)
 
