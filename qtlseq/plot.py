@@ -138,7 +138,7 @@ class Plot(object):
             ax.set_title(chr_name, fontsize=17)
 
         plt.savefig('{}/bulk1_SNPindex.png'.format(self.out), format='png')
-
+        plt.savefig('{}/bulk1_SNPindex.pdf'.format(self.out), format='pdf')
     def plot_bulk2_SNPindex(self):
         fig = plt.figure(figsize=(self.fig_width*self.N_col, 
                                   self.fig_height*self.N_raw))
@@ -190,7 +190,7 @@ class Plot(object):
             ax.set_title(chr_name, fontsize=17)
 
         plt.savefig('{}/bulk2_SNPindex.png'.format(self.out), format='png')
-
+        plt.savefig('{}/bulk2_SNPindex.pdf'.format(self.out), format='pdf')
     def plot_delta_SNPindex(self):
         fig = plt.figure(figsize=(self.fig_width*self.N_col, 
                                   self.fig_height*self.N_raw))
@@ -262,6 +262,7 @@ class Plot(object):
             ax.set_title(chr_name, fontsize=17)
 
         plt.savefig('{}/delta_SNPindex.png'.format(self.out), format='png')
+        plt.savefig('{}/delta_SNPindex.pdf'.format(self.out), format='pdf')
 
 
     def run(self):
