@@ -283,7 +283,7 @@ class Params(object):
                             action='store',
                             required=True,
                             type=str,
-                            help=('bulk1 sample ID in vcf file\n'),
+                            help=('bulk1 sample ID in vcf file, same phenotype as reference parent\n'),
                             metavar='')
         parser.add_argument('-b2',
                             '--bulk2ID',
